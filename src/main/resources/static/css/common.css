@@ -1,0 +1,464 @@
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Top Navigation Bar */
+.topnav {
+    background-color: #000;
+    overflow: hidden;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.topnav a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: inline-block;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.user-session {
+    display: flex;
+    align-items: center;
+}
+
+.user-session span {
+    margin-right: 15px;
+}
+
+/* Header Styling */
+.header {
+    background-color: #00aaff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #000;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+.header img {
+    vertical-align: middle;
+}
+
+/* Content Container */
+.content {
+    padding: 50px;
+    background-color: white;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content2 {
+    padding: 50px;
+    background-color: white;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.8em;
+    color: #000;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* New Product and Article List Layout */
+.product-list, .article-list {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+/* Individual Product and Article Boxes */
+.product, .article {
+    background-color: #00aaff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    max-width: 30%;
+}
+
+/* Images */
+.product-image {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.article-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.articlepage-image {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    display: block;
+    margin: 0 auto; 
+}
+
+.logo-image {
+    width: 100px; /* Set the width of the circle */
+    height: 100px; /* Set the height of the circle (same as width for a perfect circle) */
+    object-fit: cover; /* Ensure the image fits within the circle without distortion */
+    border-radius: 50%; /* Create the circle shape */
+    margin-bottom: 15px;
+    border: 5px solid white; /* Optional: Add a border around the circle */
+    cursor: pointer;
+}
+
+/* Descriptions */
+.product-description, .article-description {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #00aaff;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 5px solid #000;
+    width: 100%;
+}
+
+/* Footer Content - Flexbox */
+.footer-content {
+    display: flex;
+    justify-content: space-between; /* Aligns content at both ends (left, center, right) */
+    align-items: center;
+    width: 100%; /* Full width */
+    max-width: 1200px; /* Optional: limit the width */
+    padding: 0 20px;
+}
+
+/* Social Media Section (left-aligned) */
+.social-media {
+    flex: 1; /* Take up available space on the left */
+    display: flex;
+    margin-left: -10px;
+    justify-content: flex-start; /* Align items to the left */
+}
+
+.social-image {
+    height: 50px;
+    display: block;
+    cursor: pointer;
+}
+
+/* Buttons Section (right-aligned) */
+.footer-buttons {
+    flex: 1; /* Take up available space on the right */
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+    gap: 10px; /* Space between buttons */
+    margin-right: 30px;
+}
+
+.footer-buttons button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.footer-buttons button:hover {
+    background-color: #444;
+}
+
+.article h2, .video h2 {
+    font-size: 1.5em;
+}
+
+.article .read-more {
+    background-color: white;
+    color: #00aaff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.article .read-more:hover {
+    background-color: #fff;
+    color: #0077cc;
+}
+
+/* Video Section */
+.video-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.video-player {
+    width: 560px; /* Adjust the width as per your layout */
+    height: 315px;
+    border: 5px solid #fff; /* Add a white border around the video player */
+    margin-bottom: 20px;
+}
+
+.video-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between the buttons */
+}
+
+/* Reschedule, Book Appointment Section */
+.appointment-section {
+    background-color: #00aaff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.appointment-section button {
+    background-color: #000;
+}
+
+input, select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+input[type="submit"], input[type="button"], select {
+    background-color: #000;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Prescription Table Styling */
+
+.container {
+    display: flex;
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    width: 23%;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.product-card h3 {
+    font-size: 1.1em;
+    margin: 10px 0;
+}
+
+.product-card p {
+    font-size: 1.2em;
+    color: #00aaff;
+    font-weight: bold;
+}
+
+.product-card button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.product-card button:hover {
+    background-color: #000;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 20%;
+    padding-right: 20px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h3, .sidebar h4 {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li label {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li input {
+    margin-right: 8px;
+}
+
+/* Main content area (Product grid container) */
+.main-content {
+    width: 80%;
+    padding-left: 20px;
+}
+
+.product-details button {
+    background-color: #000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+.product-details button:hover {
+    background-color: #000;
+}
+
+.homeproduct-image {
+    max-width: 300px;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+thead tr {
+    background-color: #f4f4f4;
+}
+
+.animal-insights {
+    padding: 20px;
+}
+
+.animal-cards {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.animal-card {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.animal-card img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.animal-card h3 {
+    margin: 10px 0;
+}
+
+.animal-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}

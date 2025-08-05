@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prescription</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script>
+      // Function to handle adding item to cart and showing popup
+      function addToCart(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        // Fetch request to submit the form data to the server
+        fetch("/cart", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              showPopup(); // Show the popup message when the item is added successfully
+            } else {
+              console.error("Error adding item to cart");
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      async function addAllToCart() {
+      const items = [
+        { name: "Apoquel (Oclacitinib) - 5.4mg", price: 129.99 },
+        { name: "Metacam (Meloxicam) - Oral Suspension 180ml", price: 79.99 },
+        { name: "Cerenia (Maropitant) - 10mg Tablets", price: 45.99 }
+      ];
+
+      for (let item of items) {
+        const formData = new FormData();
+        formData.append("name", item.name);
+        formData.append("price", item.price);
+
+        await fetch("/cart", {
+          method: "POST",
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log(`${item.name} added to cart.`);
+          } else {
+            console.error(`Failed to add ${item.name} to cart.`);
+          }
+        })
+        .catch(error => console.error("Error:", error));
+
+        // Introduce a small delay before adding the next item
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+
+      // Optional: Display a confirmation message after all items are added
+      showPopup();  // Assuming showPopup() displays a success message
+    }
+
+      function showPopup() {
+        const popup = document.getElementById("popup-message");
+        popup.style.display = "block";
+
+        setTimeout(function () {
+          popup.style.display = "none";
+        }, 3000); // Hide the popup after 3 seconds
+      }
+
+      function filterProducts() {
+            const checkboxes = document.querySelectorAll('.sidebar input[type="checkbox"]');
+            const products = document.querySelectorAll('.product-card');
+            
+            // Create an object to hold the selected filter values
+            const filters = {
+                categories: [],
+                price: []
+            };
+            
+            // Collect all checked filters
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const category = checkbox.getAttribute('data-filter-category');
+                    const value = checkbox.getAttribute('data-filter-value');
+                    filters[category].push(value);
+                }
+            });
+
+            // Filter products
+            products.forEach(product => {
+                const category = product.getAttribute('data-category');
+                const price = product.getAttribute('data-price');
+
+                const matchesCategory = filters.categories.length === 0 || filters.categories.includes(category);
+                const matchesPrice = filters.price.length === 0 || filters.price.includes(price);
+
+                // Display or hide the product based on the matches
+                if (matchesCategory && matchesPrice) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+    </script>
+  </head>
+
+  <body>
+    <div th:replace="~{fragments :: topnav}"></div>
+
+    <div id="popup-message" class="popup-message" style="display: none">
+      Item added to your cart!
+    </div>
+
+    <style>
+      .popup-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #444 !important;
+      }
+    </style>
+
+    <div class="header">
+      <a href="/"
+        ><img src="/images/logo1.png" alt="logo" class="logo-image"
+      /></a>
+      <h1>Prescription</h1>
+    </div>
+
+    <div class="container">
+      <div class="prescription-refill">
+        <h2>Prescription Refill Requests</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Pet Name</th>
+              <th>Medication</th>
+              <th>Dosage</th>
+              <th>Date Requested</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="refill-medication" data-medication="Apoquel">
+              <td>1001</td>
+              <td>Buddy</td>
+              <td>Apoquel (Oclacitinib) - 5.4mg</td>
+              <td>2 Tablets Daily</td>
+              <td>01/09/2024</td>
+            </tr>
+            <tr class="refill-medication" data-medication="Metacam">
+              <td>1002</td>
+              <td>Max</td>
+              <td>Metacam (Meloxicam) - Oral Suspension</td>
+              <td>1.5ml Daily</td>
+              <td>05/09/2024</td>
+            </tr>
+            <tr class="refill-medication" data-medication="Cerenia">
+              <td>1003</td>
+              <td>Luna</td>
+              <td>Cerenia (Maropitant) - 10mg Tablets</td>
+              <td>1 Tablet Daily</td>
+              <td>10/09/2024</td>
+            </tr>
+          </tbody>
+        </table>
+      <button onclick="addAllToCart()">Refill All Prescriptions</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="sidebar">
+        <h3>Filter by:</h3>
+
+        <!-- Filters for prescription categories -->
+        <h4>Prescription Categories</h4>
+        <ul>
+            <li><label><input type="checkbox" data-filter-category="categories" data-filter-value="anti-inflammatory" onclick="filterProducts()"> Anti-inflammatory & Pain Relief</label></li>
+            <li><label><input type="checkbox" data-filter-category="categories" data-filter-value="allergy" onclick="filterProducts()"> Allergy & Dermatology</label></li>
+            <li><label><input type="checkbox" data-filter-category="categories" data-filter-value="antibiotics" onclick="filterProducts()"> Antibiotics</label></li>
+            <li><label><input type="checkbox" data-filter-category="categories" data-filter-value="behavioral" onclick="filterProducts()"> Behavioral & Anxiety</label></li>
+            <li><label><input type="checkbox" data-filter-category="categories" data-filter-value="gastrointestinal" onclick="filterProducts()"> Anti-nausea & Gastrointestinal</label></li>
+        </ul>
+
+        <!-- Filters for price range -->
+        <h4>Price Range</h4>
+        <ul>
+            <li><label><input type="checkbox" data-filter-category="price" data-filter-value="0-50" onclick="filterProducts()"> $0 - $50</label></li>
+            <li><label><input type="checkbox" data-filter-category="price" data-filter-value="50-100" onclick="filterProducts()"> $50 - $100</label></li>
+            <li><label><input type="checkbox" data-filter-category="price" data-filter-value="100-150" onclick="filterProducts()"> $100 - $150</label></li>
+        </ul>
+    </div>
+
+      <!-- Displaying Prescription -->
+      <div class="main-content">
+        <div class="product-grid">
+          <div
+            class="product-card"
+            data-pet="dogs"
+            data-category="allergy"
+            data-price="100-150"
+          >
+            <a href="/Prescription1">
+              <img src="/images/Apoquel.jpg" alt="Product Image" />
+            </a>
+            <a href="/Prescription1">
+              <h3>Apoquel (Oclacitinib) - 5.4mg</h3>
+            </a>
+            <p>$129.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Apoquel (Oclacitinib) - 5.4mg"
+              />
+              <input type="hidden" name="price" value="129.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+
+          <div
+            class="product-card"
+            data-pet="dogs cats"
+            data-category="anti-inflammatory"
+            data-price="50-100"
+          >
+            <a href="/Prescription2"
+              ><img src="/images/Metacam.jpg" alt="Product Image"
+            /></a>
+            <a href="/Prescription2"
+              ><h3>Metacam (Meloxicam) - Oral Suspension 180ml</h3></a
+            >
+            <p>$79.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Metacam (Meloxicam) - Oral Suspension 180ml"
+              />
+              <input type="hidden" name="price" value="79.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+
+          <div
+            class="product-card"
+            data-pet="dogs cats"
+            data-category="antibiotics"
+            data-price="0-50"
+          >
+            <a href="/Prescription3"
+              ><img src="/images/Clavamox.jpg" alt="Product Image"
+            /></a>
+            <a href="/Prescription3"><h3>Clavamox (Amoxicillin) - 15ml</h3></a>
+            <p>$23.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Clavamox (Amoxicillin) - 15ml"
+              />
+              <input type="hidden" name="price" value="23.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+
+          <div
+            class="product-card"
+            data-pet="all"
+            data-category="antibiotics"
+            data-price="0-50"
+          >
+            <a href="/Prescription4"
+              ><img src="/images/Baytril.jpeg" alt="Product Image"
+            /></a>
+            <a href="/Prescription4"><h3>Baytril (Enrofloxacin) - 20ml</h3></a>
+            <p>$37.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Baytril (Enrofloxacin) - 20ml"
+              />
+              <input type="hidden" name="price" value="37.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+
+          <div
+            class="product-card"
+            data-pet="dogs cats"
+            data-category="behavioral"
+            data-price="50-100"
+          >
+            <a href="/Prescription5"
+              ><img src="/images/Prozac.jpg" alt="Product Image"
+            /></a>
+            <a href="/Prescription5"
+              ><h3>Prozac (Fluoxetine) - 20mg Tablets</h3></a
+            >
+            <p>$59.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Prozac (Fluoxetine) - 20mg Tablets"
+              />
+              <input type="hidden" name="price" value="59.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+
+          <div
+            class="product-card"
+            data-pet="dogs cats"
+            data-category="gastrointestinal"
+            data-price="0-50"
+          >
+            <a href="/Prescription6"
+              ><img src="/images/Cerenia.jpeg" alt="Product Image"
+            /></a>
+            <a href="/Prescription6"
+              ><h3>Cerenia (Maropitant) - 10mg Tablets</h3></a
+            >
+            <p>$45.99</p>
+
+            <form action="/cart" method="POST" onsubmit="addToCart(event)">
+              <input
+                type="hidden"
+                name="name"
+                value="Cerenia (Maropitant) - 10mg Tablets"
+              />
+              <input type="hidden" name="price" value="45.99" />
+              <button type="submit">Add to cart</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-content">
+        <!-- Social Media Icons on the Left -->
+        <div class="social-media">
+          <a href="/"
+            ><img
+              src="/images/socialmedia.png"
+              class="social-image"
+              alt="Social Media"
+          /></a>
+        </div>
+
+        <a href="/"
+          ><img src="/images/logo1.png" alt="logo" class="logo-image"
+        /></a>
+
+        <!-- Buttons aligned to the right -->
+        <div class="footer-buttons">
+          <a href="/"><button class="button">Contact Us</button></a>
+          <a href="/"><button class="button">Help</button></a>
+          <a href="/"><button class="button">About Us</button></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

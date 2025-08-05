@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Find Nearby Vet Clinics</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .search-bar {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #45a049;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #clinics-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .clinic-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+    </style>
+    <script th:inline="javascript">
+        var clinics = /*[[${clinics}]]*/ [];
+        var userLocation = /*[[${userLocation}]]*/ null;
+        var googleMapsApiKey = /*[[${googleMapsApiKey}]]*/ '';
+        var nextPageToken = /*[[${nextPageToken}]]*/ null;
+        var address = /*[[${address}]]*/ '';
+    </script>
+    <script th:src="@{/js/clinic-locator.js}"></script>
+    <script th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${googleMapsApiKey} + '&libraries=places&callback=initMap'}" async defer onerror="handleMapError()"></script>
+</head>
+<body>
+    <div th:replace="~{fragments :: topnav}"></div>
+
+    <div class="header">
+        <img th:src="@{/images/logo1.png}" alt="Logo" class="logo-image">
+        <h1>Find Nearby Vet Clinics</h1>
+    </div>
+
+    <div class="content">
+        <form action="/clinic-locator" method="post" class="search-container">
+            <input type="text" id="address" name="address" required th:value="${address}" placeholder="Enter your address" class="search-bar">
+            <input type="hidden" id="postcode" name="postcode" th:value="${postcode}">
+            <button type="submit" class="search-button">Find Clinics</button>
+        </form>
+
+        <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+
+        <div th:if="${clinics}">
+            <h2>Showing results for: <span th:text="${address}"></span></h2>
+            <div id="map"></div>
+            <ul id="clinics-list">
+                <li th:each="clinic, iterStat : ${clinics}" class="clinic-item">
+                    <h3><span th:text="${iterStat.count}"></span>. <span th:text="${clinic.name}"></span></h3>
+                    <p th:text="${clinic.address}"></p>
+                    <p>Distance: <span th:text="${#numbers.formatDecimal(clinic.distance, 1, 2)}">0.00</span> km</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="social-media">
+                <img th:src="@{/images/socialmedia.png}" alt="Social Media" class="social-image">
+            </div>
+            <img th:src="@{/images/logo1.png}" alt="Logo" class="logo-image">
+            <div class="footer-buttons">
+                <button>Contact Us</button>
+                <button>Help</button>
+                <button>About Us</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Internal CSS for styling the cart section -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      /* Cart page layout */
+      .cart-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      .cart-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+      }
+
+      table th,
+      table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      table th {
+        background-color: #04aa6d;
+        color: white;
+      }
+
+      table tr:hover {
+        background-color: #f5f5f5;
+      }
+
+      .total {
+        text-align: right;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      /* Button styling */
+      .cart-container button {
+        display: inline-block;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .cart-container button:hover {
+        background-color: #555;
+      }
+
+      .cart-container .remove-btn {
+        background-color: #333;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .cart-container .remove-btn:hover {
+        background-color: #555;
+      }
+
+      /* Align button properly */
+      .cart-actions {
+        text-align: right;
+        margin-top: 20px;
+      }
+
+      /* Empty cart message styling */
+      #empty-cart-message {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+      }
+    </style>
+
+    <!-- Stripe JS -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      const stripe = Stripe(
+        "pk_test_51Q1RzD036DNUIvGZSoG30561bCFUhif00RxYqGckkcxzWufRcjG8SPRuhGS0eG907aTKuW5tP4mLqlUjJebV77CH00hOwiFGqq"
+      );
+    </script>
+  </head>
+  <body>
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/appointment">Appointment</a>
+      <a href="/medical-record">Medical Record</a>
+      <a href="/prescription">Prescription</a>
+      <a href="/resources">Resource</a>
+      <a href="/clinic-locator"><i class="fa fa-map-marker"></i></a>
+      <a href="/settings"><i class="fa fa-cog"></i></a>
+      <a href="/cart"><i class="fa fa-shopping-cart"></i></a>
+    </div>
+
+
+    <!-- Cart Header -->
+    <div class="header">
+      <a href="/"
+        ><img src="/images/logo1.png" alt="logo" class="logo-image"
+      /></a>
+      <h1>Your Cart</h1>
+    </div>
+
+    <!-- Empty Cart Message -->
+    <p id="empty-cart-message" style="display: none">Your Cart is Empty.</p>
+
+    <!-- Cart Content -->
+    <div class="cart-container" id="cart-container" style="display: none">
+      <h2>Items in Your Cart</h2>
+
+      <!-- Cart Items Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items">
+          <!-- Cart items will be injected dynamically here -->
+        </tbody>
+      </table>
+
+      <!-- Total Amount -->
+      <div class="total">
+        <h3>Total Amount: $<span id="total-amount">0.00</span></h3>
+      </div>
+
+      <!-- Proceed to Payment Button -->
+      <div class="cart-actions">
+        <button id="checkout-button">Proceed to Payment</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-content">
+        <div class="social-media">
+          <a href="/"
+            ><img
+              src="/images/socialmedia.png"
+              class="social-image"
+              alt="Social Media"
+          /></a>
+        </div>
+
+        <a href="/"
+          ><img src="/images/logo1.png" alt="logo" class="logo-image"
+        /></a>
+
+        <div class="footer-buttons">
+          <a href="/"><button class="button">Contact Us</button></a>
+          <a href="/"><button class="button">Help</button></a>
+          <a href="/"><button class="button">About Us</button></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript for Cart Functionality -->
+    <script>
+      // Function to load the cart items dynamically
+      function loadCartItems() {
+        fetch("/api/cart-items")
+          .then((response) => response.json())
+          .then((data) => {
+            const cartItems = data.cartItems || [];
+            const cartTable = document.getElementById("cart-items");
+            const totalAmountEl = document.getElementById("total-amount");
+            const cartContainer = document.getElementById("cart-container");
+            const emptyCartMessage =
+              document.getElementById("empty-cart-message");
+
+            cartTable.innerHTML = "";
+
+            if (cartItems.length === 0) {
+              // If cart is empty, show the empty cart message and hide the cart container
+              emptyCartMessage.style.display = "block";
+              cartContainer.style.display = "none";
+            } else {
+              // If cart has items, hide the empty message and show the cart
+              emptyCartMessage.style.display = "none";
+              cartContainer.style.display = "block";
+
+              let totalAmount = 0;
+
+              cartItems.forEach((item) => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td>${item.name}</td>
+                  <td>
+                    <form action="/cart/update-quantity/${
+                      item.name
+                    }" method="post">
+                      <select name="quantity" onchange="this.form.submit()">
+                        ${Array.from({ length: 10 }, (_, i) => i + 1)
+                          .map(
+                            (i) =>
+                              `<option value="${i}" ${
+                                item.quantity === i ? "selected" : ""
+                              }>${i}</option>`
+                          )
+                          .join("")}
+                      </select>
+                    </form>
+                  </td>
+                  <td>$${item.price.toFixed(2)}</td>
+                  <td>$${itemTotal.toFixed(2)}</td>
+                  <td><button class="remove-btn" onclick="removeItem('${
+                    item.name
+                  }')">Remove</button></td>
+                `;
+                cartTable.appendChild(row);
+              });
+
+              totalAmountEl.textContent = totalAmount.toFixed(2);
+            }
+          })
+          .catch((error) => console.error("Error loading cart items:", error));
+      }
+
+      // Function to remove item from cart
+      function removeItem(itemName) {
+        fetch(`/api/cart/remove-item/${itemName}`, { method: "DELETE" })
+          .then(() => loadCartItems()) // Reload cart after removing the item
+          .catch((error) => console.error("Error removing item:", error));
+      }
+
+      // Event listener for the Stripe "Proceed to Payment" button
+      document
+        .getElementById("checkout-button")
+        .addEventListener("click", function () {
+          fetch("/api/create-checkout-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+            .then((response) => response.json())
+            .then((session) => {
+              return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+      // Initial load when the page is ready
+      document.addEventListener("DOMContentLoaded", loadCartItems);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+  <div th:replace="~{fragments :: topnav}"></div>
+
+<div class="header">
+  <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+  <h1>Resources</h1>
+</div>
+
+<div class="content">
+  <h2 class="section-title"><u>Article</u></h2>
+  <div class="articles article-list">
+    <div class="article">
+      <img src="/images/Article1.png" alt="Article 1" class="article-image">
+      <p class="article-description">Australian Pet Food Standards</p>
+      <a href='/article1'><button>Read More</button></a>
+    </div>
+    <div class="article">
+      <img src="/images/Article2.png" alt="Article 2" class="article-image">
+      <p class="article-description">Homemade Pet Food vs Commercial Pet Food</p>
+      <a href='/article2'><button>Read More</button></a>
+    </div>
+    <div class="article">
+      <img src="/images/Article3.png" alt="Article 3" class="article-image">
+      <p class="article-description">Top 3 Pet Food Trends in 2024</p>
+      <a href='/article3'><button>Read More</button></a>
+    </div>
+  </div>
+
+  <h2 class="section-title"><u>Video</u></h2>
+  <div class="video-section">
+    <div class="video-player">
+      <video id="videoPlayer" width="560" height="315" controls>
+        <source id="videoSource" src="/Images/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <div class="video-controls">
+    <button id="prev-video" class="button">Back</button>
+    <button id="next-video" class="button">Next</button>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-content">
+    <div class="social-media">
+      <a href='/'><img src='/images/socialmedia.png' class='social-image' alt='Social Media'></a>
+    </div>
+    <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+    <div class="footer-buttons">
+      <a href='/'><button class="button">Contact Us</button></a>
+      <a href='/'><button class="button">Help</button></a>
+      <a href='/'><button class="button">About Us</button></a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Array of video sources
+  const videos = [
+    "/Images/video1.mp4",
+    "/Images/video2.mp4",
+    "/Images/video3.mp4" // Add more video paths here
+  ];
+
+  let currentVideoIndex = 0;
+
+  // Function to update the video player source
+  function updateVideo() {
+    const videoPlayer = document.getElementById("videoPlayer");
+    const videoSource = document.getElementById("videoSource");
+
+    videoSource.src = videos[currentVideoIndex];
+    videoPlayer.load();  // Reload the video element to apply the new source
+  }
+
+  // Event listener for Next button
+  document.getElementById("next-video").addEventListener("click", function() {
+    currentVideoIndex = (currentVideoIndex + 1) % videos.length; // Loop back to start if at the end
+    updateVideo();
+  });
+
+  // Event listener for Back button
+  document.getElementById("prev-video").addEventListener("click", function() {
+    currentVideoIndex = (currentVideoIndex - 1 + videos.length) % videos.length; // Loop back to end if at the start
+    updateVideo();
+  });
+</script>
+
+</body>
+</html>
+

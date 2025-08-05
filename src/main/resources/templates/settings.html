@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - VetCare</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div th:replace="~{fragments :: topnav}"></div>
+
+    <div class="header">
+        <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+        <h1>Settings</h1>
+    </div>
+
+    <div class="content">
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+        <div th:if="${user != null}">
+            <h2>Account Settings</h2>
+            <form th:action="@{/settings/update}" method="post">
+                <div>
+                    <label for="notificationsEnabled">Enable Notifications:</label>
+                    <input type="checkbox" id="notificationsEnabled" name="notificationsEnabled" th:checked="${user.notificationsEnabled}">
+                </div>
+                <div>
+                    <label for="darkModeEnabled">Enable Dark Mode:</label>
+                    <input type="checkbox" id="darkModeEnabled" name="darkModeEnabled" th:checked="${user.darkModeEnabled}">
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+
+            <h3>Change Email</h3>
+            <form th:action="@{/settings/changeEmail}" method="post">
+                <div>
+                    <label for="newEmail">New Email:</label>
+                    <input type="email" id="newEmail" name="newEmail" required>
+                </div>
+                <div>
+                    <label for="emailPassword">Current Password:</label>
+                    <input type="password" id="emailPassword" name="password" required>
+                </div>
+                <button type="submit">Change Email</button>
+            </form>
+
+            <h3>Change Password</h3>
+            <form th:action="@{/settings/changePassword}" method="post">
+                <div>
+                    <label for="currentPassword">Current Password:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+                <div>
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div>
+                    <label for="confirmPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit">Change Password</button>
+            </form>
+
+            <h3>Delete Account</h3>
+            <p>Warning: This action cannot be undone.</p>
+            <button onclick="showDeleteConfirmation()">Delete Account</button>
+
+            <div id="deleteConfirmation" style="display: none;">
+                <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                <form th:action="@{/settings/deleteAccount}" method="post">
+                    <label for="password">Enter your password to confirm:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Confirm Deletion</button>
+                </form>
+                <button onclick="hideDeleteConfirmation()">Cancel</button>
+            </div>
+        </div>
+
+        <div th:if="${user == null}">
+            <h2>Settings</h2>
+            <p>You need to be logged in to view and modify your settings.</p>
+            <a href="/login" class="btn btn-primary">Log In</a>
+            <a href="/signup" class="btn btn-secondary">Sign Up</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <!-- Social Media Icons on the Left -->
+            <div class="social-media">
+                <a href='/'><img src='/images/socialmedia.png' class='social-image' alt='Social Media'></a>
+            </div>
+    
+                <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+    
+            <!-- Buttons aligned to the right -->
+            <div class="footer-buttons">
+                <a href='/'><button class="button">Contact Us</button></a>
+                <a href='/'><button class="button">Help</button></a>
+                <a href='/'><button class="button">About Us</button></a>
+            </div>
+        </div>
+    </div>
+
+    <script th:if="${user != null}">
+        function showDeleteConfirmation() {
+            document.getElementById('deleteConfirmation').style.display = 'block';
+        }
+
+        function hideDeleteConfirmation() {
+            document.getElementById('deleteConfirmation').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

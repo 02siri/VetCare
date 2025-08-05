@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prozac (Fluoxetine) - Detailed Information</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="topnav">
+      <a href="/">Home</a>
+      <a href="/appointment">Appointment</a>
+      <a href="/medical-record">Medical Record</a>
+      <a href="/prescription">Prescription</a>
+      <a href="/resources">Resource</a>
+      <a href="/cart"><i class="fa fa-shopping-cart"></i></a>
+    </div>
+
+    <div class="header">
+      <a href="/"
+        ><img src="/images/logo1.png" alt="logo" class="logo-image"
+      /></a>
+      <h1>VetCare</h1>
+    </div>
+
+    <div class="container">
+      <div class="product-grid">
+        <!-- Product Image -->
+        <div class="product-card">
+          <img src="/images/Prozac.jpg" alt="Prozac (Fluoxetine)" />
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-details">
+          <h2>Prozac (Fluoxetine) - 20mg Tablets</h2>
+          <p><strong>Price:</strong> $59.99</p>
+          <p>
+            <strong>Description:</strong> Prozac (Fluoxetine) is a selective
+            serotonin reuptake inhibitor (SSRI) used to treat anxiety,
+            behavioral disorders, and obsessive-compulsive disorders in dogs and
+            cats.
+          </p>
+          <p>
+            <strong>Uses:</strong> Prozac is used to treat separation anxiety,
+            compulsive behaviors, and aggression in pets.
+          </p>
+
+          <div class="dosage-info">
+            <h3>Dosage Instructions:</h3>
+            <p>
+              The typical dosage for Prozac is 0.5 to 1 mg/kg of body weight,
+              administered once daily.
+            </p>
+            <ul>
+              <li>
+                Dosage may vary based on the pet's condition and response to
+                treatment. Always follow your veterinarian’s recommendation.
+              </li>
+            </ul>
+          </div>
+
+          <form onsubmit="addToCart(event)">
+            <input
+              type="hidden"
+              name="name"
+              value="Prozac (Fluoxetine) - 20mg Tablets"
+            />
+            <input type="hidden" name="price" value="59.99" />
+            <button type="submit">Add to cart</button>
+          </form>
+          <button onclick="history.back()">Back</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="popup-message" class="popup-message" style="display: none">
+      Item added to your cart!
+    </div>
+
+    <div class="footer">
+      <div class="footer-content">
+        <!-- Social Media Icons on the Left -->
+        <div class="social-media">
+          <a href="/"
+            ><img
+              src="/images/socialmedia.png"
+              class="social-image"
+              alt="Social Media"
+          /></a>
+        </div>
+
+        <a href="/"
+          ><img src="/images/logo1.png" alt="logo" class="logo-image"
+        /></a>
+
+        <!-- Buttons aligned to the right -->
+        <div class="footer-buttons">
+          <a href="/"><button class="button">Contact Us</button></a>
+          <a href="/"><button class="button">Help</button></a>
+          <a href="/"><button class="button">About Us</button></a>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <style>
+    .popup-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      font-size: 16px;
+    }
+  </style>
+
+  <script>
+    // Modify the addToCart function to prevent the default form submission
+    function addToCart(event) {
+      event.preventDefault(); // Prevent the form from refreshing the page
+
+      const form = event.target;
+      const name = form.name.value;
+      const price = form.price.value;
+
+      // Use fetch to send the POST request
+      fetch("/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `name=${encodeURIComponent(name)}&price=${price}`,
+      })
+        .then((response) => {
+          if (response.ok) {
+            showPopupMessage("Item added to your cart!");
+          } else {
+            showPopupMessage("Error adding item to cart.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          showPopupMessage("Error adding item to cart.");
+        });
+    }
+
+    // Function to show the custom pop-up message
+    function showPopupMessage(message) {
+      const popup = document.getElementById("popup-message");
+      popup.textContent = message;
+      popup.style.display = "block";
+
+      // Hide the popup after 3 seconds
+      setTimeout(function () {
+        popup.style.display = "none";
+      }, 3000);
+    }
+  </script>
+</html>

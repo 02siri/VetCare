@@ -1,0 +1,537 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Record</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For chart integration -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #00A0E3;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .record-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+        }
+
+        .medical-record,
+        .vaccination-record {
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 45%;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .record-header {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .treatment-plan {
+            margin-top: 20px;
+            background-color: #00A0E3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .treatment-plan table {
+            background-color: white;
+            color: black;
+            border-radius: 8px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        /* New sections for user and admin login */
+        .login-section {
+            margin-bottom: 20px;
+        }
+
+        .login-section button {
+            padding: 10px 20px;
+            background-color: #00A0E3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-container label,
+        .form-container select,
+        .form-container input,
+        .form-container textarea {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .form-container input[type="submit"] {
+            width: auto;
+            background-color: #00A0E3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .confirmation-message {
+            color: green;
+            font-weight: bold;
+            display: none;
+        }
+
+        .collapsible {
+            background-color: #00A0E3;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .content-collapsible {
+            padding: 10px 15px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{fragments :: topnav}"></div>
+
+<div class="header">
+    <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+    <h1>Medical Record</h1>
+</div>
+
+<div class="content">
+
+    <!-- User and Admin login sections -->
+<div class="login-section" style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- Left section: Admin and User Login buttons -->
+    <div style="display: flex; gap: 10px;">
+        <!-- Admin Login Button (only visible if isAdmin is true) -->
+        <div th:if="${isAdmin}">
+            <button onclick="showAdminPage()">Admin Dashboard</button>
+        </div>
+
+        <!-- User Login Button (always visible) -->
+        <div>
+            <button onclick="showUserPage()">User Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Right section: Back Button -->
+    <div>
+        <button onclick="window.location.href='/medical-record'">Back</button>
+    </div>
+</div>
+
+
+    <!-- Content dynamically changed based on login -->
+    <div id="login-content"></div>
+
+    <!-- Hardcoded Medical and Vaccination Record Sections -->
+    <div class="record-container">
+        <!-- Medical Record Section -->
+        <div class="medical-record">
+            <div class="record-header">Medical Record</div>
+            <table id="medical-record-table">
+                <tr>
+                    <th>Date</th>
+                    <th>Health Condition</th>
+                    <th>Veterinarian</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>17/08/2024</td>
+                    <td>Good</td>
+                    <td>David</td>
+                    <td>abc</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Vaccination Record Section -->
+        <div class="vaccination-record">
+            <div class="record-header">Vaccination Record</div>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Vaccination Type</th>
+                    <th>Due Date</th>
+                </tr>
+                <tr>
+                    <td>17/08/2024</td>
+                    <td>Rabies</td>
+                    <td>16/12/2024</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Hardcoded Treatment Plan Section -->
+    <div class="treatment-plan">
+        <h2>Treatment Plan</h2>
+        <table>
+            <tr>
+                <th>No</th>
+                <th>Pet Name</th>
+                <th>Date</th>
+                <th>Type</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Buddy</td>
+                <td>15/09/2024</td>
+                <td>General Checkup</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Max</td>
+                <td>20/09/2024</td>
+                <td>Vaccination</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Luna</td>
+                <td>10/10/2024</td>
+                <td>Deworming</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Animal Insights Section -->
+    <div class="animal-insights">
+        <h2>Animal Insights</h2>
+        <div class="animal-cards">
+            <div class="animal-card">
+                <img src="/Images/leo_dog.png" alt="Leo the dog">
+                <h3>Leo</h3>
+                <p>Species: Dog</p>
+                <p>Age: 6</p>
+                <p>Weight: 5.00 kg</p>
+                <p>Vet Visit: Canine hepatitis and rabies</p>
+            </div>
+            <div class="animal-card">
+                <img src="/Images/ariana_cat.JPG" alt="Ariana the cat">
+                <h3>Ariana</h3>
+                <p>Species: Cat</p>
+                <p>Age: 2</p>
+                <p>Weight: 6.50 kg</p>
+                <p>Vet Visit: General check-up</p>
+            </div>
+            <div class="animal-card">
+                <img src="/Images/Blu.png" alt="Blue the bird">
+                <h3>Blue</h3>
+                <p>Species: Bird</p>
+                <p>Age: 3</p>
+                <p>Weight: 0.50 kg</p>
+                <p>Vet Visit: Nail cutting</p>
+            </div>
+        </div>
+    </div>
+
+<div class="footer">
+    <div class="footer-content">
+        <!-- Social Media Icons on the Left -->
+        <div class="social-media">
+            <a href='/'><img src='/images/socialmedia.png' class='social-image' alt='Social Media'></a>
+        </div>
+
+            <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+
+        <!-- Buttons aligned to the right -->
+        <div class="footer-buttons">
+            <a href='/'><button class="button">Contact Us</button></a>
+            <a href='/'><button class="button">Help</button></a>
+            <a href='/'><button class="button">About Us</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle the form submission and record saving -->
+<script>
+    // Function to display User Login page
+    function showUserPage() {
+        const content = `
+            <h2>User Dashboard</h2>
+            <div class="form-container">
+                <h3>Upload Prescription</h3>
+                <form id="upload-prescription-form" enctype="multipart/form-data">
+                    <label for="prescription">Upload Prescription:</label>
+                    <input type="file" id="prescription" name="prescription" required>
+                    <input type="submit" value="Upload Prescription">
+                </form>
+                <p class="confirmation-message" id="prescription-confirmation">Prescription has been successfully uploaded!</p>
+            </div>
+            
+            <!-- User-Specific Medical Information -->
+            <button class="collapsible">Medical Summary</button>
+            <div class="content-collapsible">
+                <table>
+                    <tr>
+                        <th>Pet's Name</th>
+                        <th>Species</th>
+                        <th>Breed</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Health Status</th>
+                        <th>Allergies</th>
+                        <th>Current Medications</th>
+                    </tr>
+                    <tr>
+                        <td>Buddy</td>
+                        <td>Dog</td>
+                        <td>Golden Retriever</td>
+                        <td>Male</td>
+                        <td>5 years</td>
+                        <td>Good</td>
+                        <td>None</td>
+                        <td>None</td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Upcoming Appointments/Reminders</button>
+            <div class="content-collapsible">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>20/10/2024</td>
+                        <td>Vaccination</td>
+                        <td>Rabies Booster</td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Billing and Payments History</button>
+            <div class="content-collapsible">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Service</th>
+                        <th>Total Cost</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>15/09/2024</td>
+                        <td>General Check-up</td>
+                        <td>$120</td>
+                        <td>Paid</td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="collapsible">Medical Attachments</button>
+            <div class="content-collapsible">
+                <ul>
+                    <li><a href="#">X-ray (15/09/2024)</a></li>
+                    <li><a href="#">Blood Test Report (17/09/2024)</a></li>
+                </ul>
+            </div>
+        `;
+        document.getElementById('login-content').innerHTML = content;
+
+        // Add event listener to handle prescription upload form
+        document.getElementById('upload-prescription-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('prescription-confirmation').style.display = 'block';
+            document.getElementById('upload-prescription-form').reset();
+        });
+
+        // Initialize collapsibles
+        initCollapsibles();
+    }
+
+    // Function to display Admin Login page
+    function showAdminPage() {
+        const content = `
+            <h2>Admin Dashboard</h2>
+            <div class="form-container">
+                <h3>Add/Update Medical Record</h3>
+                <form id="admin-medical-record-form">
+                    <label for="date">Select Date:</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <label for="condition">Select Health Condition:</label>
+                    <select id="condition" name="condition" required>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+
+                    <label for="veterinarian">Select Veterinarian:</label>
+                    <select id="veterinarian" name="veterinarian" required>
+                        <option value="David">David</option>
+                        <option value="Emily">Emily</option>
+                        <option value="James">James</option>
+                    </select>
+
+                    <label for="notes">Enter Notes:</label>
+                    <textarea id="notes" name="notes" rows="4" required></textarea>
+
+                    <input type="submit" value="Save Record">
+                </form>
+
+                <p class="confirmation-message" id="admin-confirmation-message">Record has been successfully saved and updated!</p>
+            </div>
+
+            <!-- Admin-Specific Medical Records Table -->
+            <div class="medical-record">
+                <h2>Medical Records</h2>
+                <table id="medical-record-table">
+                    <tr>
+                        <th>Date</th>
+                        <th>Health Condition</th>
+                        <th>Veterinarian</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>17/08/2024</td>
+                        <td>Good</td>
+                        <td>David</td>
+                        <td>Check-up</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Chart for Admin Dashboard -->
+            <h3>Health Conditions Overview</h3>
+            <canvas id="healthChart"></canvas>
+        `;
+        document.getElementById('login-content').innerHTML = content;
+
+        // Add event listener to handle admin record form submission
+        document.getElementById('admin-medical-record-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Add a new row to the medical record table
+            const date = document.getElementById('date').value;
+            const condition = document.getElementById('condition').value;
+            const veterinarian = document.getElementById('veterinarian').value;
+            const notes = document.getElementById('notes').value;
+
+            const table = document.getElementById('medical-record-table');
+            const newRow = table.insertRow();
+            newRow.innerHTML = `<td>${date}</td><td>${condition}</td><td>${veterinarian}</td><td>${notes}</td>`;
+
+            // Display the confirmation message
+            document.getElementById('admin-confirmation-message').style.display = 'block';
+
+            // Clear the form
+            document.getElementById('admin-medical-record-form').reset();
+        });
+
+        // Initialize health chart for admin
+        createHealthChart();
+    }
+
+    // Collapsible sections functionality
+    function initCollapsibles() {
+        const coll = document.getElementsByClassName("collapsible");
+        for (let i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    }
+
+    // Chart for Admin Dashboard
+    function createHealthChart() {
+        const ctx = document.getElementById('healthChart').getContext('2d');
+        const healthChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Good', 'Fair', 'Critical'],
+                datasets: [{
+                    label: 'Health Conditions',
+                    data: [10, 5, 2], // Example data
+                    backgroundColor: ['#4caf50', '#ffeb3b', '#f44336']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

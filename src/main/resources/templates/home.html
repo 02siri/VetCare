@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Add styles for the introduction section */
+        .website-introduction {
+            display: flex; /* Enables side-by-side layout */
+            align-items: center; /* Vertically align text and image */
+            margin: 20px 0;
+        }
+ 
+        .website-introduction img {
+            max-width: 50%; /* Limit the size of the image */
+            margin-right: 20px; /* Space between the image and text */
+            border-radius: 10px; /* Optional: rounded corners for the image */
+        }
+ 
+        .website-introduction p {
+            flex: 1; /* Ensures the text takes the remaining space */
+        }
+    </style>
+</head>
+<body>
+  <div th:replace="~{fragments :: topnav}"></div>
+ 
+<div class="header">
+    <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+    <h1>Welcome to VetCare</h1>
+</div>
+ 
+<div class="content">
+    <!-- Website Introduction Section -->
+    <h2 class="section-title"><u>About VetCare</u></h2>
+    <div class="website-introduction">
+        <!-- Add the image beside the introduction text -->
+        <img src="/images/dog.png" alt="Animal" class="intro-image">
+ 
+        <!-- Introduction text -->
+        <div class="intro-text">
+            <p>
+                Welcome to VetCare, your one-stop solution for all your pet's needs. At VetCare, we are passionate about ensuring the health
+                and well-being of your beloved pets. Our platform offers a variety of services to help you take better care of your furry friends.
+            </p>
+            <p>
+                Whether it's booking appointments with trusted veterinarians, keeping track of your pet's medical records, or ordering prescriptions,
+                we are here to provide a seamless experience. Explore our resources section for articles and videos on how to keep your pets healthy
+                and happy, or visit our online shop for the best pet products.
+            </p>
+            <p>
+                Our mission is to create a community where pets come first. With our easy-to-use platform, you can rest assured that your pets will
+                receive the best care possible. Join us in making pet care simple, effective, and stress-free.
+            </p>
+        </div>
+    </div>
+</div>
+ 
+<div class="content2">
+    <!-- Articles Section -->
+    <h2 class="section-title"><u>Article</u></h2>
+    <div class="articles article-list">
+        <div class="article">
+            <img src="/images/Article1.png" alt="Article 1" class="article-image">
+            <p class="article-description">Australian Pet Food Standards</p>
+            <a href='/article1'><button>Read More</button></a>
+        </div>
+        <div class="article">
+            <img src="/images/Article2.png" alt="Article 2" class="article-image">
+            <p class="article-description">Homemade Pet Food vs Commercial Pet Food</p>
+            <a href='/article2'><button>Read More</button></a>
+        </div>
+        <div class="article">
+            <img src="/images/Article3.png" alt="Article 3" class="article-image">
+            <p class="article-description">Top 3 Pet Food Trends in 2024</p>
+            <a href='/article3'><button>Read More</button></a>
+        </div>
+    </div>
+</div>
+ 
+ 
+<div class="footer">
+    <div class="footer-content">
+        <!-- Social Media Icons on the Left -->
+        <div class="social-media">
+            <a href='/'><img src='/images/socialmedia.png' class='social-image' alt='Social Media'></a>
+        </div>
+ 
+            <a href="/"><img src="/images/logo1.png" alt="logo" class="logo-image"></a>
+ 
+        <!-- Buttons aligned to the right -->
+        <div class="footer-buttons">
+            <a href='/'><button class="button">Contact Us</button></a>
+            <a href='/'><button class="button">Help</button></a>
+            <a href='/'><button class="button">About Us</button></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

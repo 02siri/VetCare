@@ -1,0 +1,27 @@
+{
+  "name": "team-project-group-p09-04",
+  "version": "1.0.0",
+  "description": "VetCare Team Project",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "stripe": "^16.12.0",
+    "team-project-group-p09-04": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
